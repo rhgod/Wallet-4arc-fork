@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Wallet Management System API",
         Version = "v1",
-        Description = "4ARC Yazýlým Staj Projesi - Cüzdan Yönetim Sistemi API Dokümantasyonu"
+        Description = "4ARC YazÄ±lÄ±m Staj Projesi - CÃ¼zdan YÃ¶netim Sistemi API DokÃ¼mantasyonu"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -58,12 +58,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+var corsOrigins = (Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")
+    ?? builder.Configuration["CorsSettings:AllowedOrigins"]
+    ?? "http://localhost:3000")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // react ui adresi
+            policy.WithOrigins(corsOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -71,12 +76,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
