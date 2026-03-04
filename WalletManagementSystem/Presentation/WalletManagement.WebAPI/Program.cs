@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Wallet Management System API",
         Version = "v1",
-        Description = "4ARC Yaz�l�m Staj Projesi - C�zdan Y�netim Sistemi API Dok�mantasyonu"
+        Description = "4ARC Yazılım Staj Projesi - Cüzdan Yönetim Sistemi API Dokümantasyonu"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
