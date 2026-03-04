@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_API_URL = 'http://localhost:5138/api';
+const BASE_API_URL = process.env.WALLET_API_URL || 'http://localhost:5138/api';
 
 const api = axios.create({
     baseURL: BASE_API_URL,
