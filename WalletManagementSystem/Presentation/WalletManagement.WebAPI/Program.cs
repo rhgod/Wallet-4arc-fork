@@ -1,10 +1,12 @@
-using FluentValidation.AspNetCore;
-using Microsoft.OpenApi.Models;
 using Serilog;
-using WalletManagement.Application.DependencyResolvers;
-using WalletManagement.InnerInfrastructure.DependencyResolvers;
-using WalletManagement.Persistence.DependencyResolvers;
+using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using WalletManagement.WebAPI.Middlewares;
+using WalletManagement.Persistence.Context;
+using WalletManagement.Application.DependencyResolvers;
+using WalletManagement.Persistence.DependencyResolvers;
+using WalletManagement.InnerInfrastructure.DependencyResolvers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,10 +78,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
