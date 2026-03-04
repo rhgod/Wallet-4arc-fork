@@ -16,7 +16,11 @@ namespace WalletManagement.Persistence.DependencyResolvers
         {
             services.AddDbContext<AppDbContext>(
                 opt => opt.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection")));
+                    configuration.GetConnectionString("DefaultConnection"),
+                    sqlOptions => sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null)));
         }
     }
 }
